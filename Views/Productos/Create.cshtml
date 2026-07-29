@@ -1,0 +1,293 @@
+@model SistemaFarmaciaWeb.Models.Producto
+
+@{
+    ViewData["Title"] = "Registrar producto";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-9">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-white py-3">
+
+                    <h3 class="fw-bold mb-1">
+                        Registrar nuevo producto
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        Ingresa la información del medicamento o producto.
+                    </p>
+
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form asp-action="Create" method="post">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+                        <div class="row">
+
+                            <!-- Código -->
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="Codigo"
+                                       class="form-label fw-semibold">
+                                    Código
+                                </label>
+
+                                <input asp-for="Codigo"
+                                       class="form-control"
+                                       placeholder="Ejemplo: MED-001" />
+
+                                <span asp-validation-for="Codigo"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <!-- Nombre -->
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="Nombre"
+                                       class="form-label fw-semibold">
+                                    Nombre del producto
+                                </label>
+
+                                <input asp-for="Nombre"
+                                       class="form-control"
+                                       placeholder="Ejemplo: Paracetamol 500 mg" />
+
+                                <span asp-validation-for="Nombre"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <!-- Descripción -->
+                            <div class="col-12 mb-3">
+
+                                <label asp-for="Descripcion"
+                                       class="form-label fw-semibold">
+                                    Descripción
+                                </label>
+
+                                <textarea asp-for="Descripcion"
+                                          class="form-control"
+                                          rows="3"
+                                          placeholder="Información adicional del producto">
+                                </textarea>
+
+                                <span asp-validation-for="Descripcion"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <!-- Precio de compra -->
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="PrecioCompra"
+                                       class="form-label fw-semibold">
+                                    Precio de compra
+                                </label>
+
+                                <div class="input-group">
+
+                                    <span class="input-group-text">
+                                        Bs
+                                    </span>
+
+                                    <input asp-for="PrecioCompra"
+                                           type="number"
+                                           step="0.01"
+                                           min="0"
+                                           class="form-control"
+                                           placeholder="0.00" />
+
+                                </div>
+
+                                <span asp-validation-for="PrecioCompra"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <!-- Precio de venta -->
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="PrecioVenta"
+                                       class="form-label fw-semibold">
+                                    Precio de venta
+                                </label>
+
+                                <div class="input-group">
+
+                                    <span class="input-group-text">
+                                        Bs
+                                    </span>
+
+                                    <input asp-for="PrecioVenta"
+                                           type="number"
+                                           step="0.01"
+                                           min="0"
+                                           class="form-control"
+                                           placeholder="0.00" />
+
+                                </div>
+
+                                <span asp-validation-for="PrecioVenta"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <!-- Stock -->
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="Stock"
+                                       class="form-label fw-semibold">
+                                    Stock inicial
+                                </label>
+
+                                <input asp-for="Stock"
+                                       type="number"
+                                       min="0"
+                                       class="form-control"
+                                       placeholder="0" />
+
+                                <span asp-validation-for="Stock"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <!-- Stock mínimo -->
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="StockMinimo"
+                                       class="form-label fw-semibold">
+                                    Stock mínimo
+                                </label>
+
+                                <input asp-for="StockMinimo"
+                                       type="number"
+                                       min="0"
+                                       class="form-control"
+                                       placeholder="5" />
+
+                                <span asp-validation-for="StockMinimo"
+                                      class="text-danger">
+                                </span>
+
+                                <small class="text-muted">
+                                    El sistema mostrará una alerta al llegar a esta cantidad.
+                                </small>
+
+                            </div>
+
+                            <!-- Fecha de vencimiento -->
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="FechaVencimiento"
+                                       class="form-label fw-semibold">
+                                    Fecha de vencimiento
+                                </label>
+
+                                <input asp-for="FechaVencimiento"
+                                       type="date"
+                                       class="form-control" />
+
+                                <span asp-validation-for="FechaVencimiento"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <!-- Categoría -->
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="IdCategoria"
+                                       class="form-label fw-semibold">
+                                    Categoría
+                                </label>
+
+                                <select asp-for="IdCategoria"
+                                        class="form-select"
+                                        asp-items="ViewBag.IdCategoria">
+
+                                    <option value="">
+                                        Seleccione una categoría
+                                    </option>
+
+                                </select>
+
+                                <span asp-validation-for="IdCategoria"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <!-- Estado -->
+                            <div class="col-12 mb-4">
+
+                                <div class="form-check form-switch">
+
+                                    <input asp-for="Estado"
+                                           class="form-check-input"
+                                           type="checkbox" />
+
+                                    <label asp-for="Estado"
+                                           class="form-check-label fw-semibold">
+                                        Producto activo
+                                    </label>
+
+                                </div>
+
+                                <small class="text-muted">
+                                    Los productos inactivos no estarán disponibles para la venta.
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="d-flex justify-content-end gap-2">
+
+                            <a asp-action="Index"
+                               class="btn btn-outline-secondary">
+                                Cancelar
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+                                Guardar producto
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

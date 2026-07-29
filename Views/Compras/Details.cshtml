@@ -1,0 +1,187 @@
+﻿@model SistemaFarmaciaWeb.Models.Compra
+
+@{
+    ViewData["Title"] = "Detalles de la compra";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-xl-10">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-white py-3">
+
+                    <div class="d-flex flex-column flex-md-row
+                        justify-content-between
+                        align-items-md-center
+                        gap-2">
+
+                        <div>
+
+                            <h3 class="fw-bold mb-1">
+                                Detalles de la compra
+                            </h3>
+
+                            <p class="text-muted mb-0">
+                                Información completa de la compra registrada.
+                            </p>
+
+                        </div>
+
+                        <span class="badge bg-primary fs-6">
+                            Compra #@Model.IdCompra
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="card-body p-4">
+
+                    <div class="row mb-4">
+
+                        <div class="col-md-6 mb-3">
+
+                            <small class="text-muted d-block">
+                                Proveedor
+                            </small>
+
+                            <p class="fw-semibold fs-5 mb-0">
+                                @Model.IdProveedorNavigation.Nombre
+                            </p>
+
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+
+                            <small class="text-muted d-block">
+                                Fecha
+                            </small>
+
+                            <p class="fw-semibold mb-0">
+                                @Model.FechaCompra.ToString("dd/MM/yyyy HH:mm")
+                            </p>
+
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+
+                            <small class="text-muted d-block">
+                                Registrado por
+                            </small>
+
+                            <p class="fw-semibold mb-0">
+                                @Model.IdUsuarioNavigation.Nombre
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <h5 class="fw-bold mb-3">
+                        Productos comprados
+                    </h5>
+
+                    @if (Model.DetalleCompra != null &&
+                         Model.DetalleCompra.Any())
+                    {
+                        <div class="table-responsive">
+
+                            <table class="table table-bordered align-middle">
+
+                                <thead class="table-light">
+
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Producto</th>
+                                        <th class="text-end">Cantidad</th>
+                                        <th class="text-end">Precio unitario</th>
+                                        <th class="text-end">Subtotal</th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    @foreach (var detalle in Model.DetalleCompra)
+                                    {
+                                        decimal subtotal =
+                                            detalle.Cantidad *
+                                            detalle.PrecioUnitario;
+
+                                        <tr>
+
+                                            <td>
+                                                @detalle.IdProductoNavigation.Codigo
+                                            </td>
+
+                                            <td class="fw-semibold">
+                                                @detalle.IdProductoNavigation.Nombre
+                                            </td>
+
+                                            <td class="text-end">
+                                                @detalle.Cantidad
+                                            </td>
+
+                                            <td class="text-end">
+                                                Bs. @detalle.PrecioUnitario.ToString("N2")
+                                            </td>
+
+                                            <td class="text-end fw-semibold">
+                                                Bs. @subtotal.ToString("N2")
+                                            </td>
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+                                <tfoot>
+
+                                    <tr class="table-light">
+
+                                        <td colspan="4"
+                                            class="text-end fw-bold fs-5">
+                                            Total:
+                                        </td>
+
+                                        <td class="text-end fw-bold fs-5 text-primary">
+                                            Bs. @Model.Total.ToString("N2")
+                                        </td>
+
+                                    </tr>
+
+                                </tfoot>
+
+                            </table>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            Esta compra no tiene productos registrados.
+                        </div>
+                    }
+
+                    <div class="d-flex justify-content-end mt-4">
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary">
+                            Volver al historial
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,834 @@
+﻿@model SistemaFarmaciaWeb.ViewModels.CompraCreateViewModel
+
+@using SistemaFarmaciaWeb.Models
+@using System.Text.Json
+
+@{
+    ViewData["Title"] = "Registrar compra";
+
+    var productos = ViewBag.Productos as List<Producto>
+        ?? new List<Producto>();
+
+    string productosJson = JsonSerializer.Serialize(
+        productos.Select(producto => new
+        {
+            id = producto.IdProducto,
+            nombre = producto.Nombre,
+            codigo = producto.Codigo,
+            precioCompra = producto.PrecioCompra
+        })
+    );
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-xl-11">
+
+            <div class="card shadow-sm border-0">
+
+                <!-- ENCABEZADO -->
+                <div class="card-header bg-white py-3">
+
+                    <h3 class="fw-bold mb-1">
+                        <i class="bi bi-box-seam me-1"></i>
+                        Registrar nueva compra
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        Selecciona el proveedor y agrega los productos comprados.
+                    </p>
+
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form asp-controller="Compras"
+                          asp-action="Create"
+                          method="post"
+                          id="formCompra">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="alert alert-danger">
+                        </div>
+
+                        <!-- INFORMACIÓN DE LA COMPRA -->
+                        <div class="row mb-4">
+
+                            <!-- PROVEEDOR -->
+                            <div class="col-md-7 mb-3">
+
+                                <label asp-for="IdProveedor"
+                                       class="form-label fw-semibold">
+                                    Proveedor
+                                </label>
+
+                                <select asp-for="IdProveedor"
+                                        asp-items="ViewBag.Proveedores"
+                                        class="form-select">
+
+                                    <option value="">
+                                        Seleccione un proveedor
+                                    </option>
+
+                                </select>
+
+                                <span asp-validation-for="IdProveedor"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <!-- FECHA -->
+                            <div class="col-md-5 mb-3">
+
+                                <label asp-for="FechaCompra"
+                                       class="form-label fw-semibold">
+                                    Fecha de compra
+                                </label>
+
+                                <input asp-for="FechaCompra"
+                                       type="datetime-local"
+                                       class="form-control"
+                                       value="@Model.FechaCompra.ToString("yyyy-MM-ddTHH:mm")" />
+
+                                <span asp-validation-for="FechaCompra"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <!-- ENCABEZADO DE PRODUCTOS -->
+                        <div class="d-flex flex-column flex-md-row
+                            justify-content-between
+                            align-items-md-center
+                            gap-2 mb-3">
+
+                            <div>
+
+                                <h5 class="fw-bold mb-1">
+                                    Productos de la compra
+                                </h5>
+
+                                <p class="text-muted mb-0">
+                                    Agrega uno o varios productos con su
+                                    cantidad y precio de compra.
+                                </p>
+
+                            </div>
+
+                            <button type="button"
+                                    id="btnAgregarProducto"
+                                    class="btn btn-success">
+
+                                <i class="bi bi-plus-circle me-1"></i>
+                                Agregar producto
+                            </button>
+
+                        </div>
+
+                        <span asp-validation-for="Detalles"
+                              class="text-danger d-block mb-3">
+                        </span>
+
+                        <!-- TABLA DE PRODUCTOS -->
+                        <div class="table-responsive">
+
+                            <table class="table table-bordered align-middle"
+                                   id="tablaDetalles">
+
+                                <thead class="table-light">
+
+                                    <tr>
+
+                                        <th style="min-width: 260px;">
+                                            Producto
+                                        </th>
+
+                                        <th style="width: 140px;">
+                                            Cantidad
+                                        </th>
+
+                                        <th style="width: 170px;">
+                                            Precio unitario
+                                        </th>
+
+                                        <th style="width: 160px;">
+                                            Subtotal
+                                        </th>
+
+                                        <th style="width: 110px;"
+                                            class="text-center">
+                                            Acción
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+                                <tbody id="detalleBody">
+
+                                    @for (int i = 0;
+                                          i < Model.Detalles.Count;
+                                          i++)
+                                    {
+                                        <tr class="fila-detalle">
+
+                                            <!-- PRODUCTO -->
+                                            <td>
+
+                                                <select asp-for="Detalles[i].IdProducto"
+                                                        class="form-select producto-select"
+                                                        required>
+
+                                                    <option value="">
+                                                        Seleccione un producto
+                                                    </option>
+
+                                                    @foreach (var producto in productos)
+                                                    {
+                                                        <option value="@producto.IdProducto">
+                                                            @producto.Codigo - @producto.Nombre
+                                                        </option>
+                                                    }
+
+                                                </select>
+
+                                                <span asp-validation-for="Detalles[i].IdProducto"
+                                                      class="text-danger">
+                                                </span>
+
+                                            </td>
+
+                                            <!-- CANTIDAD -->
+                                            <td>
+
+                                                <input asp-for="Detalles[i].Cantidad"
+                                                       type="number"
+                                                       min="1"
+                                                       class="form-control cantidad-input"
+                                                       required />
+
+                                                <span asp-validation-for="Detalles[i].Cantidad"
+                                                      class="text-danger">
+                                                </span>
+
+                                            </td>
+
+                                            <!-- PRECIO -->
+                                            <td>
+
+                                                <div class="input-group">
+
+                                                    <span class="input-group-text">
+                                                        Bs.
+                                                    </span>
+
+                                                    <input asp-for="Detalles[i].PrecioUnitario"
+                                                           type="number"
+                                                           min="0.01"
+                                                           step="0.01"
+                                                           class="form-control precio-input"
+                                                           required />
+
+                                                </div>
+
+                                                <span asp-validation-for="Detalles[i].PrecioUnitario"
+                                                      class="text-danger">
+                                                </span>
+
+                                            </td>
+
+                                            <!-- SUBTOTAL -->
+                                            <td class="fw-semibold">
+
+                                                Bs.
+
+                                                <span class="subtotal-text">
+                                                    @(Model.Detalles[i].Subtotal.ToString("N2"))
+                                                </span>
+
+                                            </td>
+
+                                            <!-- QUITAR -->
+                                            <td class="text-center">
+
+                                                <button type="button"
+                                                        class="btn btn-sm btn-danger btn-eliminar">
+
+                                                    <i class="bi bi-trash me-1"></i>
+                                                    Quitar
+                                                </button>
+
+                                            </td>
+
+                                        </tr>
+                                    }
+
+                                </tbody>
+
+                                <tfoot>
+
+                                    <tr class="table-light">
+
+                                        <td colspan="3"
+                                            class="text-end fw-bold fs-5">
+                                            Total:
+                                        </td>
+
+                                        <td colspan="2"
+                                            class="fw-bold fs-5 text-primary">
+
+                                            Bs.
+
+                                            <span id="totalCompra">
+                                                @Model.Total.ToString("N2")
+                                            </span>
+
+                                        </td>
+
+                                    </tr>
+
+                                </tfoot>
+
+                            </table>
+
+                        </div>
+
+                        <!-- BOTONES -->
+                        <div class="d-flex flex-column flex-sm-row
+                            justify-content-end gap-2 mt-4">
+
+                            <a asp-controller="Compras"
+                               asp-action="Index"
+                               class="btn btn-outline-secondary">
+
+                                <i class="bi bi-x-circle me-1"></i>
+                                Cancelar
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                <i class="bi bi-save me-1"></i>
+                                Guardar compra
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- DATOS JSON DE LOS PRODUCTOS -->
+<script id="productos-json"
+        type="application/json">
+    @Html.Raw(productosJson)
+</script>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            var productosJsonElemento =
+                document.getElementById("productos-json");
+
+            var productos = [];
+
+            try {
+
+                var contenidoJson = "[]";
+
+                if (productosJsonElemento &&
+                    productosJsonElemento.textContent) {
+
+                    contenidoJson =
+                        productosJsonElemento.textContent;
+                }
+
+                productos =
+                    JSON.parse(contenidoJson);
+            }
+            catch (error) {
+
+                console.error(
+                    "No fue posible cargar la lista de productos.",
+                    error
+                );
+
+                productos = [];
+            }
+
+            var detalleBody =
+                document.getElementById("detalleBody");
+
+            var btnAgregarProducto =
+                document.getElementById("btnAgregarProducto");
+
+            var totalCompra =
+                document.getElementById("totalCompra");
+
+            var formCompra =
+                document.getElementById("formCompra");
+
+            if (!detalleBody ||
+                !btnAgregarProducto ||
+                !totalCompra ||
+                !formCompra) {
+
+                console.error(
+                    "No se encontraron los elementos del formulario de compra."
+                );
+
+                return;
+            }
+
+            function escaparHtml(texto) {
+
+                var elemento =
+                    document.createElement("div");
+
+                if (texto === null ||
+                    texto === undefined) {
+
+                    texto = "";
+                }
+
+                elemento.textContent =
+                    String(texto);
+
+                return elemento.innerHTML;
+            }
+
+            function crearOpcionesProductos() {
+
+                var opciones =
+                    '<option value="">Seleccione un producto</option>';
+
+                for (var i = 0;
+                     i < productos.length;
+                     i++) {
+
+                    var producto =
+                        productos[i];
+
+                    var codigo =
+                        escaparHtml(producto.codigo);
+
+                    var nombre =
+                        escaparHtml(producto.nombre);
+
+                    opciones +=
+                        '<option value="' +
+                        producto.id +
+                        '">' +
+                        codigo +
+                        ' - ' +
+                        nombre +
+                        '</option>';
+                }
+
+                return opciones;
+            }
+
+            function buscarProducto(idProducto) {
+
+                for (var i = 0;
+                     i < productos.length;
+                     i++) {
+
+                    if (Number(productos[i].id) ===
+                        Number(idProducto)) {
+
+                        return productos[i];
+                    }
+                }
+
+                return null;
+            }
+
+            function agregarFila() {
+
+                var indice =
+                    detalleBody
+                        .querySelectorAll(".fila-detalle")
+                        .length;
+
+                var fila =
+                    document.createElement("tr");
+
+                fila.className =
+                    "fila-detalle";
+
+                fila.innerHTML =
+                    '<td>' +
+
+                        '<select name="Detalles[' +
+                        indice +
+                        '].IdProducto" ' +
+                        'class="form-select producto-select" ' +
+                        'required>' +
+
+                            crearOpcionesProductos() +
+
+                        '</select>' +
+
+                    '</td>' +
+
+                    '<td>' +
+
+                        '<input name="Detalles[' +
+                        indice +
+                        '].Cantidad" ' +
+                        'type="number" ' +
+                        'min="1" ' +
+                        'value="1" ' +
+                        'class="form-control cantidad-input" ' +
+                        'required />' +
+
+                    '</td>' +
+
+                    '<td>' +
+
+                        '<div class="input-group">' +
+
+                            '<span class="input-group-text">' +
+                                'Bs.' +
+                            '</span>' +
+
+                            '<input name="Detalles[' +
+                            indice +
+                            '].PrecioUnitario" ' +
+                            'type="number" ' +
+                            'min="0.01" ' +
+                            'step="0.01" ' +
+                            'value="0.00" ' +
+                            'class="form-control precio-input" ' +
+                            'required />' +
+
+                        '</div>' +
+
+                    '</td>' +
+
+                    '<td class="fw-semibold">' +
+
+                        'Bs. ' +
+
+                        '<span class="subtotal-text">' +
+                            '0.00' +
+                        '</span>' +
+
+                    '</td>' +
+
+                    '<td class="text-center">' +
+
+                        '<button type="button" ' +
+                        'class="btn btn-sm btn-danger btn-eliminar">' +
+
+                            '<i class="bi bi-trash me-1"></i>' +
+                            'Quitar' +
+
+                        '</button>' +
+
+                    '</td>';
+
+                detalleBody.appendChild(fila);
+
+                registrarEventosFila(fila);
+                renumerarFilas();
+                calcularSubtotalFila(fila);
+            }
+
+            function registrarEventosFila(fila) {
+
+                var productoSelect =
+                    fila.querySelector(".producto-select");
+
+                var cantidadInput =
+                    fila.querySelector(".cantidad-input");
+
+                var precioInput =
+                    fila.querySelector(".precio-input");
+
+                var btnEliminar =
+                    fila.querySelector(".btn-eliminar");
+
+                if (!productoSelect ||
+                    !cantidadInput ||
+                    !precioInput ||
+                    !btnEliminar) {
+
+                    return;
+                }
+
+                productoSelect.addEventListener(
+                    "change",
+                    function () {
+
+                        var productoSeleccionado =
+                            buscarProducto(
+                                productoSelect.value
+                            );
+
+                        if (productoSeleccionado) {
+
+                            precioInput.value =
+                                Number(
+                                    productoSeleccionado.precioCompra
+                                ).toFixed(2);
+                        }
+                        else {
+
+                            precioInput.value =
+                                "0.00";
+                        }
+
+                        calcularSubtotalFila(fila);
+                    }
+                );
+
+                cantidadInput.addEventListener(
+                    "input",
+                    function () {
+
+                        calcularSubtotalFila(fila);
+                    }
+                );
+
+                precioInput.addEventListener(
+                    "input",
+                    function () {
+
+                        calcularSubtotalFila(fila);
+                    }
+                );
+
+                btnEliminar.addEventListener(
+                    "click",
+                    function () {
+
+                        var filas =
+                            detalleBody.querySelectorAll(
+                                ".fila-detalle"
+                            );
+
+                        if (filas.length <= 1) {
+
+                            alert(
+                                "La compra debe tener al menos un producto."
+                            );
+
+                            return;
+                        }
+
+                        fila.parentNode.removeChild(fila);
+
+                        renumerarFilas();
+                        calcularTotal();
+                    }
+                );
+            }
+
+            function calcularSubtotalFila(fila) {
+
+                var cantidadInput =
+                    fila.querySelector(".cantidad-input");
+
+                var precioInput =
+                    fila.querySelector(".precio-input");
+
+                var subtotalTexto =
+                    fila.querySelector(".subtotal-text");
+
+                if (!cantidadInput ||
+                    !precioInput ||
+                    !subtotalTexto) {
+
+                    return;
+                }
+
+                var cantidad =
+                    Number(cantidadInput.value) || 0;
+
+                var precio =
+                    Number(precioInput.value) || 0;
+
+                var subtotal =
+                    cantidad * precio;
+
+                subtotalTexto.textContent =
+                    subtotal.toFixed(2);
+
+                calcularTotal();
+            }
+
+            function calcularTotal() {
+
+                var total = 0;
+
+                var filas =
+                    detalleBody.querySelectorAll(
+                        ".fila-detalle"
+                    );
+
+                for (var i = 0;
+                     i < filas.length;
+                     i++) {
+
+                    var cantidadInput =
+                        filas[i].querySelector(
+                            ".cantidad-input"
+                        );
+
+                    var precioInput =
+                        filas[i].querySelector(
+                            ".precio-input"
+                        );
+
+                    var cantidad = 0;
+                    var precio = 0;
+
+                    if (cantidadInput) {
+
+                        cantidad =
+                            Number(cantidadInput.value) || 0;
+                    }
+
+                    if (precioInput) {
+
+                        precio =
+                            Number(precioInput.value) || 0;
+                    }
+
+                    total +=
+                        cantidad * precio;
+                }
+
+                totalCompra.textContent =
+                    total.toFixed(2);
+            }
+
+            function renumerarFilas() {
+
+                var filas =
+                    detalleBody.querySelectorAll(
+                        ".fila-detalle"
+                    );
+
+                for (var i = 0;
+                     i < filas.length;
+                     i++) {
+
+                    var productoSelect =
+                        filas[i].querySelector(
+                            ".producto-select"
+                        );
+
+                    var cantidadInput =
+                        filas[i].querySelector(
+                            ".cantidad-input"
+                        );
+
+                    var precioInput =
+                        filas[i].querySelector(
+                            ".precio-input"
+                        );
+
+                    if (productoSelect) {
+
+                        productoSelect.name =
+                            "Detalles[" +
+                            i +
+                            "].IdProducto";
+                    }
+
+                    if (cantidadInput) {
+
+                        cantidadInput.name =
+                            "Detalles[" +
+                            i +
+                            "].Cantidad";
+                    }
+
+                    if (precioInput) {
+
+                        precioInput.name =
+                            "Detalles[" +
+                            i +
+                            "].PrecioUnitario";
+                    }
+                }
+            }
+
+            btnAgregarProducto.addEventListener(
+                "click",
+                agregarFila
+            );
+
+            var filasIniciales =
+                detalleBody.querySelectorAll(
+                    ".fila-detalle"
+                );
+
+            for (var i = 0;
+                 i < filasIniciales.length;
+                 i++) {
+
+                registrarEventosFila(
+                    filasIniciales[i]
+                );
+
+                calcularSubtotalFila(
+                    filasIniciales[i]
+                );
+            }
+
+            if (filasIniciales.length === 0) {
+
+                agregarFila();
+            }
+
+            formCompra.addEventListener(
+                "submit",
+                function (evento) {
+
+                    var filas =
+                        detalleBody.querySelectorAll(
+                            ".fila-detalle"
+                        );
+
+                    if (filas.length === 0) {
+
+                        evento.preventDefault();
+
+                        alert(
+                            "Debe agregar al menos un producto."
+                        );
+
+                        return;
+                    }
+
+                    renumerarFilas();
+                }
+            );
+
+            calcularTotal();
+        });
+    </script>
+}

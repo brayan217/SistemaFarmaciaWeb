@@ -1,0 +1,266 @@
+@model SistemaFarmaciaWeb.Models.Producto
+
+@{
+    ViewData["Title"] = "Detalles del producto";
+
+    decimal utilidad = Model.PrecioVenta - Model.PrecioCompra;
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-10">
+
+            <div class="card shadow border-0">
+
+                <div class="card-header bg-white py-3">
+
+                    <h3 class="fw-bold mb-1">
+                        Detalles del producto
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        Información completa del medicamento o producto.
+                    </p>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <!-- Código -->
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted">
+                                Código
+                            </small>
+
+                            <h5 class="mb-0">
+                                @Model.Codigo
+                            </h5>
+
+                        </div>
+
+                        <!-- Nombre -->
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted">
+                                Nombre
+                            </small>
+
+                            <h5 class="mb-0">
+                                @Model.Nombre
+                            </h5>
+
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="col-12 mb-4">
+
+                            <small class="text-muted">
+                                Descripción
+                            </small>
+
+                            @if (string.IsNullOrWhiteSpace(Model.Descripcion))
+                            {
+                                <p class="text-muted mb-0">
+                                    Sin descripción.
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="mb-0">
+                                    @Model.Descripcion
+                                </p>
+                            }
+
+                        </div>
+
+                        <!-- Categoría -->
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted">
+                                Categoría
+                            </small>
+
+                            <h6>
+
+                                @if (Model.IdCategoriaNavigation != null)
+                                {
+                                    @Model.IdCategoriaNavigation.Nombre
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        Sin categoría
+                                    </span>
+                                }
+
+                            </h6>
+
+                        </div>
+
+                        <!-- Estado -->
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted">
+                                Estado
+                            </small>
+
+                            <p>
+
+                                @if (Model.Estado)
+                                {
+                                    <span class="badge bg-success">
+                                        Producto activo
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">
+                                        Producto inactivo
+                                    </span>
+                                }
+
+                            </p>
+
+                        </div>
+
+                        <!-- Precio compra -->
+                        <div class="col-md-4 mb-4">
+
+                            <small class="text-muted">
+                                Precio de compra
+                            </small>
+
+                            <h5>
+                                Bs @Model.PrecioCompra.ToString("N2")
+                            </h5>
+
+                        </div>
+
+                        <!-- Precio venta -->
+                        <div class="col-md-4 mb-4">
+
+                            <small class="text-muted">
+                                Precio de venta
+                            </small>
+
+                            <h5 class="text-primary">
+                                Bs @Model.PrecioVenta.ToString("N2")
+                            </h5>
+
+                        </div>
+
+                        <!-- Utilidad -->
+                        <div class="col-md-4 mb-4">
+
+                            <small class="text-muted">
+                                Ganancia por unidad
+                            </small>
+
+                            <h5 class="text-success">
+                                Bs @utilidad.ToString("N2")
+                            </h5>
+
+                        </div>
+
+                        <!-- Stock -->
+                        <div class="col-md-4 mb-4">
+
+                            <small class="text-muted">
+                                Stock actual
+                            </small>
+
+                            <p>
+
+                                @if (Model.Stock == 0)
+                                {
+                                    <span class="badge bg-danger">
+                                        Sin stock
+                                    </span>
+                                }
+                                else if (Model.Stock <= Model.StockMinimo)
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        @Model.Stock unidades
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">
+                                        @Model.Stock unidades
+                                    </span>
+                                }
+
+                            </p>
+
+                        </div>
+
+                        <!-- Stock mínimo -->
+                        <div class="col-md-4 mb-4">
+
+                            <small class="text-muted">
+                                Stock mínimo
+                            </small>
+
+                            <h6>
+                                @Model.StockMinimo unidades
+                            </h6>
+
+                        </div>
+
+                        <!-- Fecha -->
+                        <div class="col-md-4 mb-4">
+
+                            <small class="text-muted">
+                                Fecha de vencimiento
+                            </small>
+
+                            <h6>
+
+                                @if (Model.FechaVencimiento.HasValue)
+                                {
+                                    @Model.FechaVencimiento.Value.ToString("dd/MM/yyyy")
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        Sin fecha
+                                    </span>
+                                }
+
+                            </h6>
+
+                        </div>
+
+                    </div>
+
+                    <hr />
+
+                    <div class="d-flex justify-content-end gap-2">
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary">
+                            Volver
+                        </a>
+
+                        <a asp-action="Edit"
+                           asp-route-id="@Model.IdProducto"
+                           class="btn btn-warning">
+                            Editar
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

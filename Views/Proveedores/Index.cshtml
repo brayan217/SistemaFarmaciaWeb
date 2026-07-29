@@ -1,0 +1,253 @@
+@model IEnumerable<SistemaFarmaciaWeb.Models.Proveedor>
+
+@{
+    ViewData["Title"] = "Proveedores";
+}
+
+<div class="container mt-4">
+
+    @if (TempData["MensajeExito"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            @TempData["MensajeExito"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+    @if (TempData["MensajeError"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+
+            @TempData["MensajeError"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+    <!-- Encabezado -->
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+
+        <div>
+
+            <h2 class="fw-bold mb-1">
+                Proveedores
+            </h2>
+
+            <p class="text-muted mb-0">
+                Administra las empresas y personas que abastecen a la farmacia.
+            </p>
+
+        </div>
+
+        <a asp-action="Create"
+           class="btn btn-primary">
+            + Nuevo proveedor
+        </a>
+
+    </div>
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+
+            <h5 class="mb-0">
+                Lista de proveedores
+            </h5>
+
+            <span class="badge bg-primary">
+                Total: @(Model?.Count() ?? 0)
+            </span>
+
+        </div>
+
+        <div class="card-body p-0">
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th class="ps-4">
+                                    Nombre
+                                </th>
+
+                                <th>
+                                    Teléfono
+                                </th>
+
+                                <th>
+                                    Correo
+                                </th>
+
+                                <th>
+                                    Dirección
+                                </th>
+
+                                <th>
+                                    Estado
+                                </th>
+
+                                <th class="text-center">
+                                    Acciones
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td class="ps-4 fw-semibold">
+                                        @item.Nombre
+                                    </td>
+
+                                    <td>
+
+                                        @if (string.IsNullOrWhiteSpace(item.Telefono))
+                                        {
+                                            <span class="text-muted">
+                                                Sin teléfono
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @item.Telefono
+                                        }
+
+                                    </td>
+
+                                    <td>
+
+                                        @if (string.IsNullOrWhiteSpace(item.Correo))
+                                        {
+                                            <span class="text-muted">
+                                                Sin correo
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @item.Correo
+                                        }
+
+                                    </td>
+
+                                    <td>
+
+                                        @if (string.IsNullOrWhiteSpace(item.Direccion))
+                                        {
+                                            <span class="text-muted">
+                                                Sin dirección
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @item.Direccion
+                                        }
+
+                                    </td>
+
+                                    <td>
+
+                                        @if (item.Estado)
+                                        {
+                                            <span class="badge bg-success">
+                                                Activo
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                Inactivo
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td class="text-center text-nowrap">
+
+                                        <a asp-action="Edit"
+                                           asp-route-id="@item.IdProveedor"
+                                           class="btn btn-sm btn-warning">
+                                            Editar
+                                        </a>
+
+                                        <a asp-action="Details"
+                                           asp-route-id="@item.IdProveedor"
+                                           class="btn btn-sm btn-info text-white">
+                                            Detalles
+                                        </a>
+
+                                        @if (item.Estado)
+                                        {
+                                            <a asp-action="Delete"
+                                               asp-route-id="@item.IdProveedor"
+                                               class="btn btn-sm btn-danger">
+                                                Desactivar
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-sm btn-secondary"
+                                                    disabled>
+                                                Inactivo
+                                            </button>
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+
+                    <h5>
+                        No existen proveedores registrados
+                    </h5>
+
+                    <p class="text-muted">
+                        Registra el primer proveedor para comenzar.
+                    </p>
+
+                    <a asp-action="Create"
+                       class="btn btn-primary">
+                        Registrar proveedor
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,143 @@
+@model SistemaFarmaciaWeb.Models.Usuario
+
+@{
+    ViewData["Title"] = "Desactivar usuario";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-white py-3">
+
+                    <h3 class="fw-bold text-danger mb-1">
+                        Desactivar usuario
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        Confirma si deseas desactivar la cuenta seleccionada.
+                    </p>
+
+                </div>
+
+                <div class="card-body p-4">
+
+                    <div class="alert alert-warning">
+                        El usuario no será eliminado permanentemente.
+                        Su cuenta quedará inactiva y no podrá ingresar al sistema.
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-12 mb-4">
+
+                            <small class="text-muted">
+                                Nombre completo
+                            </small>
+
+                            <p class="fw-semibold fs-5 mb-0">
+                                @Model.Nombre
+                            </p>
+
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted">
+                                Correo electrónico
+                            </small>
+
+                            <p class="fw-semibold mb-0">
+                                @Model.Correo
+                            </p>
+
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted">
+                                Rol
+                            </small>
+
+                            <p class="mb-0">
+
+                                @if (Model.Rol == "Administrador")
+                                {
+                                    <span class="badge bg-primary">
+                                        Administrador
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-info text-dark">
+                                        Cajero
+                                    </span>
+                                }
+
+                            </p>
+
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted">
+                                Estado actual
+                            </small>
+
+                            <p class="mb-0">
+
+                                @if (Model.Estado)
+                                {
+                                    <span class="badge bg-success">
+                                        Activo
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">
+                                        Inactivo
+                                    </span>
+                                }
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <form asp-action="Delete"
+                          asp-route-id="@Model.IdUsuario"
+                          method="post">
+
+                        <input type="hidden"
+                               asp-for="IdUsuario" />
+
+                        <div class="d-flex justify-content-end gap-2">
+
+                            <a asp-action="Index"
+                               class="btn btn-outline-secondary">
+                                Cancelar
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-danger">
+                                Desactivar usuario
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

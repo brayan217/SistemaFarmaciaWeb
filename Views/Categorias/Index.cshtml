@@ -1,0 +1,154 @@
+@model IEnumerable<SistemaFarmaciaWeb.Models.Categoria>
+
+@{
+    ViewData["Title"] = "Categorías";
+}
+
+<div class="container mt-4">
+    @if (TempData["MensajeExito"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["MensajeExito"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+
+    @if (TempData["MensajeError"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            @TempData["MensajeError"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+    <!-- Encabezado -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Categorías</h2>
+            <p class="text-muted mb-0">
+                Administra las categorías de los productos de la farmacia.
+            </p>
+        </div>
+
+        <a asp-action="Create" class="btn btn-primary">
+            + Nueva categoría
+        </a>
+    </div>
+
+    <!-- Tarjeta principal -->
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0">Lista de categorías</h5>
+        </div>
+
+        <div class="card-body p-0">
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4">ID</th>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Estado</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="ps-4">
+                                        @item.IdCategoria
+                                    </td>
+
+                                    <td class="fw-semibold">
+                                        @item.Nombre
+                                    </td>
+
+                                    <td>
+                                        @if (string.IsNullOrWhiteSpace(item.Descripcion))
+                                        {
+                                            <span class="text-muted">
+                                                Sin descripción
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            @item.Descripcion
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @if (item.Estado)
+                                        {
+                                            <span class="badge bg-success">
+                                                Activa
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                Inactiva
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <td class="text-center">
+
+                                        <a asp-action="Edit"
+                                           asp-route-id="@item.IdCategoria"
+                                           class="btn btn-sm btn-warning">
+                                            Editar
+                                        </a>
+
+                                        <a asp-action="Details"
+                                           asp-route-id="@item.IdCategoria"
+                                           class="btn btn-sm btn-info text-white">
+                                            Detalles
+                                        </a>
+
+                                        <a asp-action="Delete"
+                                           asp-route-id="@item.IdCategoria"
+                                           class="btn btn-sm btn-danger">
+                                            Eliminar
+                                        </a>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <h5>No existen categorías registradas</h5>
+
+                    <p class="text-muted">
+                        Registra la primera categoría para comenzar.
+                    </p>
+
+                    <a asp-action="Create" class="btn btn-primary">
+                        Crear categoría
+                    </a>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

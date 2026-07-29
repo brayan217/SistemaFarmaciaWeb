@@ -1,0 +1,177 @@
+@model SistemaFarmaciaWeb.Models.Proveedor
+
+@{
+    ViewData["Title"] = "Editar proveedor";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-white py-3">
+
+                    <h3 class="fw-bold mb-1">
+                        Editar proveedor
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        Modifica la información del proveedor seleccionado.
+                    </p>
+
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form asp-action="Edit"
+                          asp-route-id="@Model.IdProveedor"
+                          method="post">
+
+                        <!-- Id oculto -->
+                        <input type="hidden"
+                               asp-for="IdProveedor" />
+
+                        <!-- Errores generales -->
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+                        <div class="row">
+
+                            <!-- Nombre -->
+                            <div class="col-12 mb-3">
+
+                                <label asp-for="Nombre"
+                                       class="form-label fw-semibold">
+                                    Nombre del proveedor
+                                </label>
+
+                                <input asp-for="Nombre"
+                                       class="form-control"
+                                       placeholder="Ejemplo: Distribuidora Farmacéutica Bolivia" />
+
+                                <span asp-validation-for="Nombre"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <!-- Teléfono -->
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="Telefono"
+                                       class="form-label fw-semibold">
+                                    Teléfono
+                                </label>
+
+                                <input asp-for="Telefono"
+                                       type="tel"
+                                       class="form-control"
+                                       placeholder="Ejemplo: 70707070" />
+
+                                <span asp-validation-for="Telefono"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <!-- Correo -->
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="Correo"
+                                       class="form-label fw-semibold">
+                                    Correo electrónico
+                                </label>
+
+                                <input asp-for="Correo"
+                                       type="email"
+                                       class="form-control"
+                                       placeholder="Ejemplo: ventas@proveedor.com" />
+
+                                <span asp-validation-for="Correo"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <!-- Dirección -->
+                            <div class="col-12 mb-3">
+
+                                <label asp-for="Direccion"
+                                       class="form-label fw-semibold">
+                                    Dirección
+                                </label>
+
+                                <textarea asp-for="Direccion"
+                                          class="form-control"
+                                          rows="3"
+                                          placeholder="Dirección del proveedor">
+                                </textarea>
+
+                                <span asp-validation-for="Direccion"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <!-- Estado -->
+                            <div class="col-12 mb-4">
+
+                                <div class="form-check form-switch">
+
+                                    <input asp-for="Estado"
+                                           class="form-check-input"
+                                           type="checkbox" />
+
+                                    <label asp-for="Estado"
+                                           class="form-check-label fw-semibold">
+                                        Proveedor activo
+                                    </label>
+
+                                </div>
+
+                                <small class="text-muted">
+                                    Los proveedores inactivos no podrán seleccionarse
+                                    al registrar compras.
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="d-flex justify-content-end gap-2">
+
+                            <a asp-action="Index"
+                               class="btn btn-outline-secondary">
+                                Cancelar
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-warning">
+                                Guardar cambios
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

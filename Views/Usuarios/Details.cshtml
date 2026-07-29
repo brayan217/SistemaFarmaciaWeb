@@ -1,0 +1,139 @@
+@model SistemaFarmaciaWeb.Models.Usuario
+
+@{
+    ViewData["Title"] = "Detalles del usuario";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-white py-3">
+
+                    <h3 class="fw-bold mb-1">
+                        Detalles del usuario
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        Información del usuario seleccionado.
+                    </p>
+
+                </div>
+
+                <div class="card-body p-4">
+
+                    <div class="row">
+
+                        <!-- Nombre -->
+                        <div class="col-12 mb-4">
+
+                            <small class="text-muted">
+                                Nombre completo
+                            </small>
+
+                            <p class="fw-semibold fs-5 mb-0">
+                                @Model.Nombre
+                            </p>
+
+                        </div>
+
+                        <!-- Correo -->
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted">
+                                Correo electrónico
+                            </small>
+
+                            <p class="fw-semibold mb-0">
+                                @Model.Correo
+                            </p>
+
+                        </div>
+
+                        <!-- Rol -->
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted">
+                                Rol
+                            </small>
+
+                            <p class="mb-0">
+
+                                @if (Model.Rol == "Administrador")
+                                {
+                                    <span class="badge bg-primary">
+                                        Administrador
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-info text-dark">
+                                        Cajero
+                                    </span>
+                                }
+
+                            </p>
+
+                        </div>
+
+                        <!-- Estado -->
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted">
+                                Estado
+                            </small>
+
+                            <p class="mb-0">
+
+                                @if (Model.Estado)
+                                {
+                                    <span class="badge bg-success">
+                                        Usuario activo
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">
+                                        Usuario inactivo
+                                    </span>
+                                }
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="alert alert-info">
+                        La contraseña no se muestra por seguridad.
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="d-flex justify-content-end gap-2">
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary">
+                            Volver
+                        </a>
+
+                        <a asp-action="Edit"
+                           asp-route-id="@Model.IdUsuario"
+                           class="btn btn-warning">
+                            Editar usuario
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

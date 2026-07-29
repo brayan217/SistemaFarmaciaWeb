@@ -1,0 +1,357 @@
+@model IEnumerable<SistemaFarmaciaWeb.Models.Producto>
+
+@{
+    ViewData["Title"] = "Productos";
+
+    bool esAdministrador =
+        User.IsInRole("Administrador");
+
+    DateOnly fechaHoy =
+        DateOnly.FromDateTime(DateTime.Today);
+}
+
+<div class="container mt-4">
+
+    @if (TempData["MensajeExito"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle-fill me-2"></i>
+            @TempData["MensajeExito"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Cerrar">
+            </button>
+        </div>
+    }
+
+    @if (TempData["MensajeError"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-exclamation-circle-fill me-2"></i>
+            @TempData["MensajeError"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Cerrar">
+            </button>
+        </div>
+    }
+
+    <!-- ENCABEZADO -->
+    <div class="d-flex flex-column flex-md-row
+        justify-content-between
+        align-items-md-center
+        gap-3 mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-1">
+                <i class="bi bi-capsule-pill me-1"></i>
+                Productos
+            </h2>
+
+            <p class="text-muted mb-0">
+                @if (esAdministrador)
+                {
+                    <span>
+                        Administra los medicamentos y productos de la farmacia.
+                    </span>
+                }
+                else
+                {
+                    <span>
+                        Consulta los medicamentos y productos disponibles.
+                    </span>
+                }
+            </p>
+        </div>
+
+        @if (esAdministrador)
+        {
+            <a asp-controller="Productos"
+               asp-action="Create"
+               class="btn btn-primary">
+
+                <i class="bi bi-plus-circle me-1"></i>
+                Nuevo producto
+            </a>
+        }
+
+    </div>
+
+    <!-- TARJETA PRINCIPAL -->
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-white py-3
+            d-flex justify-content-between
+            align-items-center">
+
+            <h5 class="mb-0">
+                Lista de productos
+            </h5>
+
+            <span class="badge bg-primary">
+                Total: @(Model?.Count() ?? 0)
+            </span>
+        </div>
+
+        <div class="card-body p-0">
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4">Código</th>
+                                <th>Producto</th>
+                                <th>Categoría</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th>Vencimiento</th>
+                                <th>Estado</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var item in Model)
+                            {
+                                bool estaVencido =
+                                    item.FechaVencimiento.HasValue &&
+                                    item.FechaVencimiento.Value < fechaHoy;
+
+                                bool proximoAVencer =
+                                    item.FechaVencimiento.HasValue &&
+                                    item.FechaVencimiento.Value >= fechaHoy &&
+                                    item.FechaVencimiento.Value <=
+                                    fechaHoy.AddDays(30);
+
+                                <tr>
+
+                                    <!-- CÓDIGO -->
+                                    <td class="ps-4">
+                                        <span class="fw-semibold">
+                                            @item.Codigo
+                                        </span>
+                                    </td>
+
+                                    <!-- PRODUCTO -->
+                                    <td>
+                                        <span class="fw-semibold">
+                                            @item.Nombre
+                                        </span>
+
+                                        @if (!string.IsNullOrWhiteSpace(
+                                                item.Descripcion))
+                                        {
+                                            <br />
+
+                                            <small class="text-muted">
+                                                @item.Descripcion
+                                            </small>
+                                        }
+                                    </td>
+
+                                    <!-- CATEGORÍA -->
+                                    <td>
+                                        @if (item.IdCategoriaNavigation != null)
+                                        {
+                                            @item.IdCategoriaNavigation.Nombre
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                Sin categoría
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <!-- PRECIO -->
+                                    <td class="fw-semibold">
+                                        Bs. @item.PrecioVenta.ToString("N2")
+                                    </td>
+
+                                    <!-- STOCK -->
+                                    <td>
+                                        @if (item.Stock == 0)
+                                        {
+                                            <span class="badge bg-danger">
+                                                Sin stock
+                                            </span>
+                                        }
+                                        else if (item.Stock <= item.StockMinimo)
+                                        {
+                                            <span class="badge bg-warning text-dark">
+                                                @item.Stock unidades
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">
+                                                @item.Stock unidades
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <!-- VENCIMIENTO -->
+                                    <td>
+                                        @if (!item.FechaVencimiento.HasValue)
+                                        {
+                                            <span class="text-muted">
+                                                Sin fecha
+                                            </span>
+                                        }
+                                        else if (estaVencido)
+                                        {
+                                            <div>
+                                                <span class="text-danger fw-semibold">
+                                                    @(item.FechaVencimiento.Value.ToString("dd/MM/yyyy"))
+                                                </span>
+
+                                                <br />
+
+                                                <span class="badge bg-danger mt-1">
+                                                    Vencido
+                                                </span>
+                                            </div>
+                                        }
+                                        else if (proximoAVencer)
+                                        {
+                                            <div>
+                                                <span class="fw-semibold">
+                                                    @(item.FechaVencimiento.Value.ToString("dd/MM/yyyy"))
+                                                </span>
+
+                                                <br />
+
+                                                <span class="badge bg-warning text-dark mt-1">
+                                                    Próximo a vencer
+                                                </span>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span>
+                                                @(item.FechaVencimiento.Value.ToString("dd/MM/yyyy"))
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <!-- ESTADO -->
+                                    <td>
+                                        @if (item.Estado)
+                                        {
+                                            <span class="badge bg-success">
+                                                Activo
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                Inactivo
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <!-- ACCIONES -->
+                                    <td class="text-center text-nowrap">
+
+                                        <a asp-controller="Productos"
+                                           asp-action="Details"
+                                           asp-route-id="@item.IdProducto"
+                                           class="btn btn-sm btn-info text-white">
+
+                                            <i class="bi bi-eye me-1"></i>
+                                            Detalles
+                                        </a>
+
+                                        @if (esAdministrador)
+                                        {
+                                            <a asp-controller="Productos"
+                                               asp-action="Edit"
+                                               asp-route-id="@item.IdProducto"
+                                               class="btn btn-sm btn-warning">
+
+                                                <i class="bi bi-pencil me-1"></i>
+                                                Editar
+                                            </a>
+
+                                            @if (item.Estado)
+                                            {
+                                                <a asp-controller="Productos"
+                                                   asp-action="Delete"
+                                                   asp-route-id="@item.IdProducto"
+                                                   class="btn btn-sm btn-danger">
+
+                                                    <i class="bi bi-slash-circle me-1"></i>
+                                                    Desactivar
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <button type="button"
+                                                        class="btn btn-sm btn-secondary"
+                                                        disabled>
+
+                                                    <i class="bi bi-x-circle me-1"></i>
+                                                    Inactivo
+                                                </button>
+                                            }
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+
+                    <i class="bi bi-capsule-pill display-5 text-muted"></i>
+
+                    <h5 class="mt-3">
+                        No existen productos registrados
+                    </h5>
+
+                    @if (esAdministrador)
+                    {
+                        <p class="text-muted">
+                            Registra el primer producto para comenzar.
+                        </p>
+
+                        <a asp-controller="Productos"
+                           asp-action="Create"
+                           class="btn btn-primary">
+
+                            <i class="bi bi-plus-circle me-1"></i>
+                            Registrar producto
+                        </a>
+                    }
+                    else
+                    {
+                        <p class="text-muted mb-0">
+                            No hay productos disponibles para consultar.
+                        </p>
+                    }
+
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

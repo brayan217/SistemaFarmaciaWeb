@@ -1,0 +1,190 @@
+@model SistemaFarmaciaWeb.Models.Proveedor
+
+@{
+    ViewData["Title"] = "Desactivar proveedor";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+
+                <!-- Encabezado -->
+                <div class="card-header bg-white py-3">
+
+                    <h3 class="fw-bold text-danger mb-1">
+                        Desactivar proveedor
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        Confirma si deseas desactivar este proveedor.
+                    </p>
+
+                </div>
+
+                <div class="card-body p-4">
+
+                    <div class="alert alert-warning">
+
+                        <strong>Importante:</strong>
+
+                        El proveedor no será eliminado de la base de datos.
+
+                        Solamente cambiará su estado a <strong>Inactivo</strong>
+                        y dejará de estar disponible para registrar nuevas compras.
+
+                    </div>
+
+                    <div class="row">
+
+                        <!-- Nombre -->
+                        <div class="col-12 mb-4">
+
+                            <small class="text-muted">
+                                Nombre del proveedor
+                            </small>
+
+                            <p class="fw-semibold fs-5 mb-0">
+                                @Model.Nombre
+                            </p>
+
+                        </div>
+
+                        <!-- Teléfono -->
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted d-block">
+                                Teléfono
+                            </small>
+
+                            @if (string.IsNullOrWhiteSpace(Model.Telefono))
+                            {
+                                <span class="text-muted">
+                                    Sin teléfono registrado
+                                </span>
+                            }
+                            else
+                            {
+                                <a href="tel:@Model.Telefono"
+                                   class="text-decoration-none">
+                                    @Model.Telefono
+                                </a>
+                            }
+
+                        </div>
+
+                        <!-- Correo -->
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted d-block">
+                                Correo electrónico
+                            </small>
+
+                            @if (string.IsNullOrWhiteSpace(Model.Correo))
+                            {
+                                <span class="text-muted">
+                                    Sin correo registrado
+                                </span>
+                            }
+                            else
+                            {
+                                <a href="mailto:@Model.Correo"
+                                   class="text-decoration-none">
+                                    @Model.Correo
+                                </a>
+                            }
+
+                        </div>
+
+                        <!-- Dirección -->
+                        <div class="col-12 mb-4">
+
+                            <small class="text-muted d-block">
+                                Dirección
+                            </small>
+
+                            @if (string.IsNullOrWhiteSpace(Model.Direccion))
+                            {
+                                <span class="text-muted">
+                                    Sin dirección registrada
+                                </span>
+                            }
+                            else
+                            {
+                                <p class="mb-0">
+                                    @Model.Direccion
+                                </p>
+                            }
+
+                        </div>
+
+                        <!-- Estado -->
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted d-block">
+                                Estado actual
+                            </small>
+
+                            @if (Model.Estado)
+                            {
+                                <span class="badge bg-success">
+                                    Activo
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">
+                                    Inactivo
+                                </span>
+                            }
+
+                        </div>
+
+                    </div>
+
+                    <form asp-action="Delete"
+                          asp-route-id="@Model.IdProveedor"
+                          method="post">
+
+                        <input type="hidden"
+                               asp-for="IdProveedor" />
+
+                        <div class="d-flex flex-column flex-sm-row justify-content-end gap-2">
+
+                            <a asp-action="Index"
+                               class="btn btn-outline-secondary">
+                                Cancelar
+                            </a>
+
+                            @if (Model.Estado)
+                            {
+                                <button type="submit"
+                                        class="btn btn-danger">
+                                    Desactivar proveedor
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button"
+                                        class="btn btn-secondary"
+                                        disabled>
+                                    El proveedor ya está inactivo
+                                </button>
+                            }
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

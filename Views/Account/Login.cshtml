@@ -1,0 +1,506 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Iniciar sesión";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - FarmaNet</title>
+
+    <!-- Bootstrap local del proyecto -->
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Estilos propios del login -->
+    <link rel="stylesheet"
+          href="~/css/login.css"
+          asp-append-version="true" />
+</head>
+
+<body>
+
+    <main class="login-page">
+
+        <section class="login-shell">
+
+            <!-- ==================================================
+                 PANEL IZQUIERDO: PRESENTACIÓN DEL SISTEMA
+                 ================================================== -->
+            <aside class="information-panel">
+
+                <div class="information-content">
+
+                    <header class="brand">
+
+                        <div class="brand-mark"
+                             aria-hidden="true">
+
+                            <span class="brand-cross"></span>
+
+                        </div>
+
+                        <div>
+
+                            <div class="brand-name">
+                                FarmaNet
+                            </div>
+
+                            <span class="brand-description">
+                                Sistema web de gestión farmacéutica
+                            </span>
+
+                        </div>
+
+                    </header>
+
+                    <div class="presentation">
+
+                        <div class="presentation-badge">
+
+                            <span class="badge-icon"
+                                  aria-hidden="true">
+                                ✓
+                            </span>
+
+                            Acceso seguro para usuarios autorizados
+                        </div>
+
+                        <h1>
+                            Administra la farmacia desde un solo sistema
+                        </h1>
+
+                        <p>
+                            Gestiona ventas, productos, compras,
+                            proveedores, usuarios, inventario,
+                            vencimientos y reportes de forma organizada.
+                        </p>
+
+                        <div class="system-features">
+
+                            <article class="feature-card">
+
+                                <div class="feature-icon"
+                                     aria-hidden="true">
+                                    V
+                                </div>
+
+                                <strong>
+                                    Ventas
+                                </strong>
+
+                                <span>
+                                    Registro rápido y comprobantes
+                                </span>
+
+                            </article>
+
+                            <article class="feature-card">
+
+                                <div class="feature-icon"
+                                     aria-hidden="true">
+                                    I
+                                </div>
+
+                                <strong>
+                                    Inventario
+                                </strong>
+
+                                <span>
+                                    Control de stock y vencimientos
+                                </span>
+
+                            </article>
+
+                            <article class="feature-card">
+
+                                <div class="feature-icon"
+                                     aria-hidden="true">
+                                    R
+                                </div>
+
+                                <strong>
+                                    Reportes
+                                </strong>
+
+                                <span>
+                                    Información de ventas por fechas
+                                </span>
+
+                            </article>
+
+                        </div>
+
+                    </div>
+
+                    <div class="system-status">
+
+                        <article class="status-card">
+
+                            <div class="status-information">
+
+                                <div class="status-icon"
+                                     aria-hidden="true">
+
+                                    <span class="pulse-symbol">
+                                        +
+                                    </span>
+
+                                </div>
+
+                                <div class="status-text">
+
+                                    <strong>
+                                        Sistema disponible
+                                    </strong>
+
+                                    <span>
+                                        Ventas e inventario activos
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <span class="status-check"
+                                  aria-label="Sistema activo">
+                                ✓
+                            </span>
+
+                        </article>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+            <!-- ==================================================
+                 PANEL DERECHO: FORMULARIO
+                 ================================================== -->
+            <section class="form-panel">
+
+                <!-- Marca mostrada solo en teléfonos -->
+                <header class="mobile-brand">
+
+                    <div class="mobile-brand-mark"
+                         aria-hidden="true">
+
+                        <span class="brand-cross"></span>
+
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            FarmaNet
+                        </strong>
+
+                        <span>
+                            Sistema web de gestión farmacéutica
+                        </span>
+
+                    </div>
+
+                </header>
+
+                <div class="form-header">
+
+                    <h2>
+                        Iniciar sesión
+                    </h2>
+
+                    <p>
+                        Ingresa tu correo y contraseña para acceder
+                        al sistema.
+                    </p>
+
+                </div>
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="login-error"
+                         role="alert">
+
+                        <span class="error-icon"
+                              aria-hidden="true">
+                            !
+                        </span>
+
+                        <span>
+                            @ViewBag.Error
+                        </span>
+
+                    </div>
+                }
+
+                <form asp-controller="Account"
+                      asp-action="Login"
+                      method="post"
+                      id="loginForm">
+
+                    @Html.AntiForgeryToken()
+
+                    <!-- CORREO -->
+                    <div class="form-group">
+
+                        <label for="correo"
+                               class="form-label">
+                            Correo electrónico
+                        </label>
+
+                        <div class="field-container">
+
+                            <svg class="field-icon"
+                                 viewBox="0 0 24 24"
+                                 aria-hidden="true">
+
+                                <path d="M3 5.5h18v13H3z"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="1.8"
+                                      stroke-linejoin="round" />
+
+                                <path d="m4.5 7 7.5 6 7.5-6"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="1.8"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round" />
+
+                            </svg>
+
+                            <input id="correo"
+                                   name="correo"
+                                   type="email"
+                                   class="form-control"
+                                   placeholder="usuario@farmacia.com"
+                                   autocomplete="email"
+                                   autofocus
+                                   required />
+
+                        </div>
+
+                    </div>
+
+                    <!-- CONTRASEÑA -->
+                    <div class="form-group">
+
+                        <label for="contrasena"
+                               class="form-label">
+                            Contraseña
+                        </label>
+
+                        <div class="field-container">
+
+                            <svg class="field-icon"
+                                 viewBox="0 0 24 24"
+                                 aria-hidden="true">
+
+                                <rect x="5"
+                                      y="10"
+                                      width="14"
+                                      height="10"
+                                      rx="2"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="1.8" />
+
+                                <path d="M8 10V7a4 4 0 0 1 8 0v3"
+                                      fill="none"
+                                      stroke="currentColor"
+                                      stroke-width="1.8"
+                                      stroke-linecap="round" />
+
+                            </svg>
+
+                            <input id="contrasena"
+                                   name="contrasena"
+                                   type="password"
+                                   class="form-control password-input"
+                                   placeholder="Ingresa tu contraseña"
+                                   autocomplete="current-password"
+                                   required />
+
+                            <button type="button"
+                                    id="mostrarContrasena"
+                                    class="password-toggle"
+                                    aria-label="Mostrar contraseña"
+                                    title="Mostrar contraseña">
+
+                                <svg id="iconoMostrar"
+                                     viewBox="0 0 24 24"
+                                     aria-hidden="true">
+
+                                    <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"
+                                          fill="none"
+                                          stroke="currentColor"
+                                          stroke-width="1.8"
+                                          stroke-linejoin="round" />
+
+                                    <circle cx="12"
+                                            cy="12"
+                                            r="2.5"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1.8" />
+
+                                </svg>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-information">
+
+                        <span>
+                            Acceso disponible para
+                            <strong>Administrador</strong>
+                            y
+                            <strong>Vendedor</strong>.
+                        </span>
+
+                    </div>
+
+                    <button type="submit"
+                            class="login-button">
+
+                        <svg viewBox="0 0 24 24"
+                             aria-hidden="true">
+
+                            <path d="M10 5H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round" />
+
+                            <path d="m14 8 4 4-4 4M8 12h10"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round" />
+
+                        </svg>
+
+                        Iniciar sesión
+                    </button>
+
+                    <div class="security-message">
+
+                        <span class="security-icon"
+                              aria-hidden="true">
+                            ✓
+                        </span>
+
+                        Acceso protegido para usuarios autorizados
+                    </div>
+
+                </form>
+
+                <footer class="system-footer">
+                    © 2026 FarmaNet · Sistema web para farmacia
+                </footer>
+
+            </section>
+
+        </section>
+
+    </main>
+
+    <script>
+            document.addEventListener("DOMContentLoaded", function () {
+
+                const botonMostrar =
+                    document.getElementById("mostrarContrasena");
+
+                const campoContrasena =
+                    document.getElementById("contrasena");
+
+                const iconoMostrar =
+                    document.getElementById("iconoMostrar");
+
+                if (!botonMostrar ||
+                    !campoContrasena ||
+                    !iconoMostrar) {
+
+                    return;
+                }
+
+                botonMostrar.addEventListener(
+                    "click",
+                    function () {
+
+                        const estaOculta =
+                            campoContrasena.type === "password";
+
+                        campoContrasena.type =
+                            estaOculta
+                                ? "text"
+                                : "password";
+
+                        botonMostrar.setAttribute(
+                            "aria-label",
+                            estaOculta
+                                ? "Ocultar contraseña"
+                                : "Mostrar contraseña"
+                        );
+
+                        botonMostrar.setAttribute(
+                            "title",
+                            estaOculta
+                                ? "Ocultar contraseña"
+                                : "Mostrar contraseña"
+                        );
+
+                        if (estaOculta) {
+
+                            iconoMostrar.innerHTML =
+                                '<path d="M3 3l18 18" ' +
+                                'fill="none" ' +
+                                'stroke="currentColor" ' +
+                                'stroke-width="1.8" ' +
+                                'stroke-linecap="round" />' +
+                                '<path d="M10.6 6.2A9.8 9.8 0 0 1 12 6 ' +
+                                'c6 0 9.5 6 9.5 6 ' +
+                                'a15.4 15.4 0 0 1-2.5 3.2 ' +
+                                'M6.2 7.1A15.5 15.5 0 0 0 2.5 12 ' +
+                                's3.5 6 9.5 6 ' +
+                                'a9.7 9.7 0 0 0 3-.5" ' +
+                                'fill="none" ' +
+                                'stroke="currentColor" ' +
+                                'stroke-width="1.8" ' +
+                                'stroke-linecap="round" ' +
+                                'stroke-linejoin="round" />';
+
+                        }
+                        else {
+
+                            iconoMostrar.innerHTML =
+                                '<path d="M2.5 12s3.5-6 9.5-6 ' +
+                                '9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" ' +
+                                'fill="none" ' +
+                                'stroke="currentColor" ' +
+                                'stroke-width="1.8" ' +
+                                'stroke-linejoin="round" />' +
+                                '<circle cx="12" cy="12" r="2.5" ' +
+                                'fill="none" ' +
+                                'stroke="currentColor" ' +
+                                'stroke-width="1.8" />';
+                        }
+                    }
+                );
+            });
+    </script>
+
+</body>
+
+</html>

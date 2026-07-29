@@ -1,0 +1,196 @@
+@model SistemaFarmaciaWeb.Models.Proveedor
+
+@{
+    ViewData["Title"] = "Detalles del proveedor";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+
+                <!-- Encabezado -->
+                <div class="card-header bg-white py-3">
+
+                    <div class="d-flex flex-column flex-md-row
+                        justify-content-between
+                        align-items-md-center
+                        gap-2">
+
+                        <div>
+
+                            <h3 class="fw-bold mb-1">
+                                Detalles del proveedor
+                            </h3>
+
+                            <p class="text-muted mb-0">
+                                Información completa del proveedor seleccionado.
+                            </p>
+
+                        </div>
+
+                        @if (Model.Estado)
+                        {
+                            <span class="badge bg-success fs-6">
+                                Activo
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary fs-6">
+                                Inactivo
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+                <!-- Contenido -->
+                <div class="card-body p-4">
+
+                    <div class="row">
+
+                        <!-- Nombre -->
+                        <div class="col-12 mb-4">
+
+                            <small class="text-muted">
+                                Nombre del proveedor
+                            </small>
+
+                            <p class="fw-semibold fs-5 mb-0">
+                                @Model.Nombre
+                            </p>
+
+                        </div>
+
+                        <!-- Teléfono -->
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted d-block">
+                                Teléfono
+                            </small>
+
+                            @if (string.IsNullOrWhiteSpace(Model.Telefono))
+                            {
+                                <p class="text-muted mb-0">
+                                    Sin teléfono registrado
+                                </p>
+                            }
+                            else
+                            {
+                                <a href="tel:@Model.Telefono"
+                                   class="fw-semibold text-decoration-none">
+                                    @Model.Telefono
+                                </a>
+                            }
+
+                        </div>
+
+                        <!-- Correo -->
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted d-block">
+                                Correo electrónico
+                            </small>
+
+                            @if (string.IsNullOrWhiteSpace(Model.Correo))
+                            {
+                                <p class="text-muted mb-0">
+                                    Sin correo registrado
+                                </p>
+                            }
+                            else
+                            {
+                                <a href="mailto:@Model.Correo"
+                                   class="fw-semibold text-decoration-none">
+                                    @Model.Correo
+                                </a>
+                            }
+
+                        </div>
+
+                        <!-- Dirección -->
+                        <div class="col-12 mb-4">
+
+                            <small class="text-muted d-block">
+                                Dirección
+                            </small>
+
+                            @if (string.IsNullOrWhiteSpace(Model.Direccion))
+                            {
+                                <p class="text-muted mb-0">
+                                    Sin dirección registrada
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="mb-0">
+                                    @Model.Direccion
+                                </p>
+                            }
+
+                        </div>
+
+                        <!-- Estado -->
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted d-block">
+                                Estado
+                            </small>
+
+                            @if (Model.Estado)
+                            {
+                                <span class="badge bg-success">
+                                    Proveedor activo
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">
+                                    Proveedor inactivo
+                                </span>
+                            }
+
+                        </div>
+
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="d-flex flex-column flex-sm-row
+                        justify-content-end gap-2 mt-3">
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary">
+                            Volver
+                        </a>
+
+                        <a asp-action="Edit"
+                           asp-route-id="@Model.IdProveedor"
+                           class="btn btn-warning">
+                            Editar proveedor
+                        </a>
+
+                        @if (Model.Estado)
+                        {
+                            <a asp-action="Delete"
+                               asp-route-id="@Model.IdProveedor"
+                               class="btn btn-danger">
+                                Desactivar
+                            </a>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

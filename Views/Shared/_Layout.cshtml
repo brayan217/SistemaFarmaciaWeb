@@ -1,0 +1,297 @@
+﻿@using System.Security.Claims
+
+@{
+    string controladorActual =
+        ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+
+    bool esAdministrador =
+        User.IsInRole("Administrador");
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - FarmaVentas</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <!-- Estilos del proyecto -->
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/SistemaFarmaciaWeb.styles.css"
+          asp-append-version="true" />
+</head>
+
+<body class="app-body">
+
+    <div class="app-wrapper">
+
+        <!-- MENÚ LATERAL -->
+        <aside class="sidebar">
+
+            <!-- LOGOTIPO -->
+            <div class="sidebar-brand">
+
+                <div class="sidebar-logo">
+                    💊
+                </div>
+
+                <div>
+                    <strong>FarmaVentas</strong>
+                    <small>Sistema web</small>
+                </div>
+
+            </div>
+
+            <!-- OPCIONES DEL MENÚ -->
+            <nav class="sidebar-menu">
+
+                <p class="sidebar-label">
+                    Principal
+                </p>
+
+                <!-- DASHBOARD -->
+                <a class="sidebar-link @(controladorActual == "Home" ? "active" : "")"
+                   asp-controller="Home"
+                   asp-action="Index">
+
+                    <span class="sidebar-icon">
+                        🏠
+                    </span>
+
+                    <span>
+                        Dashboard
+                    </span>
+                </a>
+
+                <!-- VENTAS -->
+                <a class="sidebar-link @(controladorActual == "Ventas" ? "active" : "")"
+                   asp-controller="Ventas"
+                   asp-action="Index">
+
+                    <span class="sidebar-icon">
+                        🛒
+                    </span>
+
+                    <span>
+                        Ventas
+                    </span>
+                </a>
+
+                <!-- INVENTARIO -->
+                <p class="sidebar-label">
+                    Inventario
+                </p>
+
+                <!-- PRODUCTOS: ADMINISTRADOR Y VENDEDOR -->
+                <a class="sidebar-link @(controladorActual == "Productos" ? "active" : "")"
+                   asp-controller="Productos"
+                   asp-action="Index">
+
+                    <span class="sidebar-icon">
+                        💊
+                    </span>
+
+                    <span>
+                        Productos
+                    </span>
+                </a>
+
+                <!-- MÓDULOS SOLO PARA ADMINISTRADOR -->
+                @if (esAdministrador)
+                {
+                    <p class="sidebar-label">
+                        Administración
+                    </p>
+
+                    <!-- CATEGORÍAS -->
+                    <a class="sidebar-link @(controladorActual == "Categorias" ? "active" : "")"
+                       asp-controller="Categorias"
+                       asp-action="Index">
+
+                        <span class="sidebar-icon">
+                            🗂️
+                        </span>
+
+                        <span>
+                            Categorías
+                        </span>
+                    </a>
+
+                    <!-- PROVEEDORES -->
+                    <a class="sidebar-link @(controladorActual == "Proveedores" ? "active" : "")"
+                       asp-controller="Proveedores"
+                       asp-action="Index">
+
+                        <span class="sidebar-icon">
+                            🚚
+                        </span>
+
+                        <span>
+                            Proveedores
+                        </span>
+                    </a>
+
+                    <!-- COMPRAS -->
+                    <a class="sidebar-link @(controladorActual == "Compras" ? "active" : "")"
+                       asp-controller="Compras"
+                       asp-action="Index">
+
+                        <span class="sidebar-icon">
+                            📦
+                        </span>
+
+                        <span>
+                            Compras
+                        </span>
+                    </a>
+
+                    <!-- USUARIOS -->
+                    <a class="sidebar-link @(controladorActual == "Usuarios" ? "active" : "")"
+                       asp-controller="Usuarios"
+                       asp-action="Index">
+
+                        <span class="sidebar-icon">
+                            👥
+                        </span>
+
+                        <span>
+                            Usuarios
+                        </span>
+                    </a>
+                }
+
+                <p class="sidebar-label">
+                    Consultas
+                </p>
+
+                <!-- REPORTES -->
+                <a class="sidebar-link @(controladorActual == "Reportes" ? "active" : "")"
+                   asp-controller="Reportes"
+                   asp-action="Index">
+
+                    <span class="sidebar-icon">
+                        📊
+                    </span>
+
+                    <span>
+                        Reportes
+                    </span>
+                </a>
+
+            </nav>
+
+            <!-- PARTE INFERIOR DEL MENÚ -->
+            <div class="sidebar-footer">
+
+                <form asp-controller="Account"
+                      asp-action="Logout"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit"
+                            class="sidebar-link sidebar-logout">
+
+                        <span class="sidebar-icon">
+                            🚪
+                        </span>
+
+                        <span>
+                            Cerrar sesión
+                        </span>
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <div class="main-content">
+
+            <!-- BARRA SUPERIOR -->
+            <header class="topbar">
+
+                <div>
+                    <h2 class="topbar-title">
+                        @(ViewData["Title"] ?? "FarmaVentas")
+                    </h2>
+                </div>
+
+                <div class="user-box">
+
+                    <div class="user-avatar">
+
+                        @{
+                            string nombreUsuario =
+                                User.Identity?.Name ?? "Usuario";
+
+                            string inicial =
+                                !string.IsNullOrWhiteSpace(nombreUsuario)
+                                    ? nombreUsuario.Substring(0, 1).ToUpper()
+                                    : "U";
+                        }
+
+                        @inicial
+
+                    </div>
+
+                    <div class="user-info">
+
+                        <strong>
+                            @(User.Identity?.Name ?? "Usuario")
+                        </strong>
+
+                        <small>
+                            @(User.FindFirstValue(ClaimTypes.Role) ?? "Sin rol")
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+            <!-- CONTENIDO DE LAS VISTAS -->
+            <main class="page-content">
+
+                @RenderBody()
+
+            </main>
+
+        </div>
+
+    </div>
+
+    <!-- JQuery -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript del proyecto -->
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
+    <!-- Scripts particulares de cada vista -->
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

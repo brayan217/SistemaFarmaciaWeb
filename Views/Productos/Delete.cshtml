@@ -1,0 +1,212 @@
+@model SistemaFarmaciaWeb.Models.Producto
+
+@{
+    ViewData["Title"] = "Desactivar producto";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-white py-3">
+
+                    <h3 class="fw-bold text-danger mb-1">
+                        Desactivar producto
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        Confirma si deseas desactivar el producto seleccionado.
+                    </p>
+
+                </div>
+
+                <div class="card-body p-4">
+
+                    @if (Model.Estado)
+                    {
+                        <div class="alert alert-warning" role="alert">
+                            <strong>Importante:</strong>
+                            el producto no será eliminado permanentemente.
+                            Quedará registrado como inactivo y no estará
+                            disponible para realizar ventas.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-secondary" role="alert">
+                            Este producto ya se encuentra inactivo.
+                        </div>
+                    }
+
+                    <div class="row">
+
+                        <!-- Código -->
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted">
+                                Código
+                            </small>
+
+                            <p class="fw-semibold mb-0">
+                                @Model.Codigo
+                            </p>
+
+                        </div>
+
+                        <!-- Nombre -->
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted">
+                                Producto
+                            </small>
+
+                            <p class="fw-semibold mb-0">
+                                @Model.Nombre
+                            </p>
+
+                        </div>
+
+                        <!-- Categoría -->
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted">
+                                Categoría
+                            </small>
+
+                            <p class="fw-semibold mb-0">
+
+                                @if (Model.IdCategoriaNavigation != null)
+                                {
+                                    @Model.IdCategoriaNavigation.Nombre
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        Sin categoría
+                                    </span>
+                                }
+
+                            </p>
+
+                        </div>
+
+                        <!-- Precio -->
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted">
+                                Precio de venta
+                            </small>
+
+                            <p class="fw-semibold mb-0">
+                                Bs @Model.PrecioVenta.ToString("N2")
+                            </p>
+
+                        </div>
+
+                        <!-- Stock -->
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted">
+                                Stock actual
+                            </small>
+
+                            <p class="mb-0">
+
+                                @if (Model.Stock == 0)
+                                {
+                                    <span class="badge bg-danger">
+                                        Sin stock
+                                    </span>
+                                }
+                                else if (Model.Stock <= Model.StockMinimo)
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        @Model.Stock unidades — Bajo stock
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">
+                                        @Model.Stock unidades
+                                    </span>
+                                }
+
+                            </p>
+
+                        </div>
+
+                        <!-- Estado -->
+                        <div class="col-md-6 mb-4">
+
+                            <small class="text-muted">
+                                Estado actual
+                            </small>
+
+                            <p class="mb-0">
+
+                                @if (Model.Estado)
+                                {
+                                    <span class="badge bg-success">
+                                        Activo
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">
+                                        Inactivo
+                                    </span>
+                                }
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <form asp-action="Delete"
+                          asp-route-id="@Model.IdProducto"
+                          method="post">
+
+                        <input type="hidden"
+                               asp-for="IdProducto" />
+
+                        <div class="d-flex justify-content-end gap-2">
+
+                            <a asp-action="Index"
+                               class="btn btn-outline-secondary">
+                                Volver
+                            </a>
+
+                            @if (Model.Estado)
+                            {
+                                <button type="submit"
+                                        class="btn btn-danger">
+                                    Desactivar producto
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button"
+                                        class="btn btn-secondary"
+                                        disabled>
+                                    Producto inactivo
+                                </button>
+                            }
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
