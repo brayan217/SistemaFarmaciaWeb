@@ -14,6 +14,7 @@ public partial class Compra
     [Key]
     public int IdCompra { get; set; }
 
+    
     [Precision(0)]
     public DateTime FechaCompra { get; set; }
 
