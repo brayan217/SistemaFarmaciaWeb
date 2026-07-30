@@ -60,6 +60,12 @@ namespace SistemaFarmaciaWeb.Controllers
             return View(venta);
         }
 
+
+
+
+
+
+
         // =====================================================
         // DESCARGAR COMPROBANTE DE VENTA EN PDF
         // GET: Ventas/DescargarPdf/5
