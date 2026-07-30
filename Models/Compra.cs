@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
+
+
 namespace SistemaFarmaciaWeb.Models;
 
 [Index("IdProveedor", Name = "IX_Compra_IdProveedor")]
