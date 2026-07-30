@@ -36,3 +36,11 @@ public partial class Compra
     [InverseProperty("Compra")]
     public virtual Usuario IdUsuarioNavigation { get; set; } = null!;
 }
+
+
+
+
+
+
+
+ 
